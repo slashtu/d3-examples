@@ -6,6 +6,11 @@ d3.sankey = function() {
       nodes = [],
       links = [];
 
+  sankey.debug = function() {
+    console.log('debug')
+    console.log(nodes);
+  };
+
   sankey.nodeWidth = function(_) {
     if (!arguments.length) return nodeWidth;
     nodeWidth = +_;
@@ -37,11 +42,19 @@ d3.sankey = function() {
   };
 
   sankey.layout = function(iterations) {
+    // console.log($.extend({}, nodes[0]));
+    // console.log($.extend({}, links[0]));
     computeNodeLinks();
+ 
+    // console.log($.extend({}, links[0]));
     computeNodeValues();
+    // console.log($.extend({}, links[0]));
     computeNodeBreadths();
     computeNodeDepths(iterations);
     computeLinkDepths();
+    console.log(links)
+    console.log(nodes)
+       // console.log($.extend({}, links[0]));
     return sankey;
   };
 
@@ -54,6 +67,7 @@ d3.sankey = function() {
     var curvature = .5;
 
     function link(d) {
+       console.log(d)
       var x0 = d.source.x + d.source.dx,
           x1 = d.target.x,
           xi = d3.interpolateNumber(x0, x1),
@@ -79,12 +93,15 @@ d3.sankey = function() {
   // Populate the sourceLinks and targetLinks for each node.
   // Also, if the source and target are not objects, assume they are indices.
   function computeNodeLinks() {
+    // console.log(nodes)
     nodes.forEach(function(node) {
+      // console.log(node)
       node.sourceLinks = [];
       node.targetLinks = [];
     });
     links.forEach(function(link) {
-      console.log(links)
+      // console.log(link)
+      // console.log($.extend({}, link));
       var source = link.source,
           target = link.target;
       if (typeof source === "number") source = link.source = nodes[link.source];
@@ -148,6 +165,8 @@ d3.sankey = function() {
   }
 
   function scaleNodeBreadths(kx) {
+    // console.log(kx)
+    // console.log(nodes)
     nodes.forEach(function(node) {
       node.x *= kx;
     });
@@ -179,6 +198,7 @@ d3.sankey = function() {
         nodes.forEach(function(node, i) {
           node.y = i;
           node.dy = node.value * ky;
+          // console.log(ky)
         });
       });
 
