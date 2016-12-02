@@ -11,7 +11,7 @@
     {"name":"HKL7DELLSW03  10.10.0.43", "group":"Qlo"},
     {"name":"HKL7DELLSW04  10.10.0.44", "group":"Qlo"},
     {"name":"HKL7DELLSW05  10.10.0.45", "group":"Qlo"},
-    {"name":"HKL7DELLSW06  10.10.0.46", "group":"Qlo"},
+    {"name":"HKL7DELLSW06  10.10.0.46", "group":"Qlo", "status": "error"},
     {"name":"HKL7DELLSW07   10.10.0.47", "group":"Qlo"},
     {"name":"HKL7DELLSW09   10.10.0.49", "group":"Qlo"},
     {"name":"HKG2PCAT02  10.10.0.18", "group":"G2"},

@@ -21,7 +21,7 @@
 
 .link {
   fill: none;
-  stroke: #000;
+  stroke: green;
   stroke-opacity: .2;
 }
 
@@ -32,6 +32,7 @@
 .error {
   stroke: red !important
 }
+
 
 </style>
 <body>
@@ -48,7 +49,7 @@
 <script src="sankey.js"></script>
 <script>
 
-var margin = {top: 1, right: 150, bottom: 6, left: 1},
+var margin = {top: 50, right: 150, bottom: 50, left: 1},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -86,7 +87,7 @@ d3.json("HK.json", function(energy) {
           return 'link'
       })
       .attr("d", path)
-      .style("stroke-width", function(d) { return Math.max(1, d.dy - 10); })
+      .style("stroke-width", function(d) { return Math.max(1, d.dy); })
       .sort(function(a, b) { return b.dy - a.dy; });
 
   link.append("title")
@@ -97,10 +98,10 @@ d3.json("HK.json", function(energy) {
   var node = svg.append("g")
       .attr("class", 'nodes')
       .selectAll(".node")
-      .data(HKGroup)
+      .data(energy.nodes)
       .enter().append("g")
-      .attr("class", function(d){ return 'nodegroup ' + d.name })
-      // .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("class", function(d){ return 'nodegroup ' + d.group })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
   
 
@@ -109,7 +110,11 @@ d3.json("HK.json", function(energy) {
   node.append("rect")
       .attr("height", function(d) { return d.dy; })
       .attr("width", sankey.nodeWidth())
-      .style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); })
+      .style("fill", function(d) { 
+        if(d.status === 'error')
+        return "red"
+        else return "#4d9344" 
+      })
       .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
     .append("title")
       .text(function(d) { return d.name + "\n" + format(d.value); });

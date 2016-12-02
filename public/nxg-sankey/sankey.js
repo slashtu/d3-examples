@@ -52,9 +52,12 @@ d3.sankey = function() {
     computeNodeBreadths();
     computeNodeDepths(iterations);
     computeLinkDepths();
+
+    computeNodeGroup();
+    computeNodeHeight();
     // console.log(links)
     // console.log(nodes)
-       // console.log($.extend({}, links[0]));
+
     return sankey;
   };
 
@@ -89,6 +92,13 @@ d3.sankey = function() {
 
     return link;
   };
+
+  function computeNodeGroup(){
+    nodes.forEach(function(node){
+      if(node.group === 'G2')
+        node.y += 50;
+    });
+  }
 
   // Populate the sourceLinks and targetLinks for each node.
   // Also, if the source and target are not objects, assume they are indices.
@@ -198,7 +208,7 @@ d3.sankey = function() {
         nodes.forEach(function(node, i) {
           node.y = i;
           node.dy = node.value * ky;
-          // console.log(ky)
+          // console.log(node.y)
         });
       });
 
@@ -214,6 +224,7 @@ d3.sankey = function() {
             var y = d3.sum(node.targetLinks, weightedSource) / d3.sum(node.targetLinks, value);
             node.y += (y - center(node)) * alpha;
           }
+          // console.log(node.y)
         });
       });
 
