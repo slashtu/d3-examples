@@ -1,0 +1,31 @@
+{"nodes":
+  [ 
+    {"name":"AMISP01", "group":"ISP"},
+    {"name":"AMISP02", "group":"ISP"},
+    {"name":"AMISP03", "group":"ISP"},
+    {"name":"AMISP04", "group":"ISP"},
+    {"name":"AMISP05", "group":"ISP"},
+
+    {"name":"AMJNPRTR01  10.18.0.1", "group":"Router"},
+    {"name":"AMJNPRTR01-SW 10.18.0.1", "group":"Router", "status": "error"},
+    {"name":"AMJNPRTR01-G2 10.18.0.1", "group":"Router"},
+    
+    {"name":"AMQLODELLSW01  10.18.0.41", "group":"Qlo"},
+    {"name":"AMQLODELLSW02  10.18.0.42", "group":"Qlo"},
+
+    {"name":"AMG2CORESW01  10.18.0.108", "group":"G2"}
+  ],
+"links":
+  [
+    {"source":0,"target":5,"value":15},
+    {"source":1,"target":5,"value":15},
+    {"source":2,"target":6,"value":15},
+    {"source":3,"target":6,"value":15},
+    {"source":4,"target":7,"value":15},
+
+    {"source":5,"target":8,"value":5},
+    {"source":5,"target":9,"value":5},
+    {"source":6,"target":9,"value":5, "status": "error"},
+    {"source":7,"target":10,"value":5, "status": "error"}
+  ]
+}

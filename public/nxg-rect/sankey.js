@@ -4,11 +4,12 @@ d3.sankey = function() {
       nodePadding = 8,
       size = [1, 1],
       nodes = [],
+      nodesByGroup = {};
       links = [];
 
   sankey.debug = function() {
-    console.log('debug')
-    console.log(nodes);
+    // console.log('debug')
+    // console.log(nodes);
   };
 
   sankey.nodeWidth = function(_) {
@@ -23,9 +24,10 @@ d3.sankey = function() {
     return sankey;
   };
 
-  sankey.nodes = function(_) {
+  sankey.nodes = function( object ) {
     if (!arguments.length) return nodes;
-    nodes = _;
+    nodes = object;
+    nodesByGroup = _.groupBy( object, function(node){ return node.group });
     return sankey;
   };
 
@@ -69,7 +71,12 @@ d3.sankey = function() {
     var curvature = .5;
 
     function link(d) {
-       // console.log(d)
+
+      // console.log(d)
+
+      // var ss = ( d.source.dy -  d.source.sourceLinks.length * d.dy ) / 2
+      // var ts = ( d.target.dy -  d.target.targetLinks.length * d.dy ) / 2
+      
       var x0 = d.source.x + d.source.dx,
           x1 = d.target.x,
           xi = d3.interpolateNumber(x0, x1),
@@ -77,7 +84,7 @@ d3.sankey = function() {
           x3 = xi(1 - curvature),
           y0 = d.source.y + d.sy + d.dy / 2,
           y1 = d.target.y + d.ty + d.dy / 2;
-          console.log(d)
+           // console.log(d)
       return "M" + x0 + "," + y0
            + "C" + x2 + "," + y0
            + " " + x3 + "," + y1
@@ -189,31 +196,41 @@ d3.sankey = function() {
         .entries(nodes)
         .map(function(d) { return d.values; });
 
+    // console.log(nodesByBreadth)
     //
     initializeNodeDepth();
     resolveCollisions();
-    for (var alpha = 1; iterations > 0; --iterations) {
-      relaxRightToLeft(alpha *= .99);
-      resolveCollisions();
-      relaxLeftToRight(alpha);
-      resolveCollisions();
-    }
+    // for (var alpha = 1; iterations > 0; --iterations) {
+    //   relaxRightToLeft(alpha *= .99);
+    //   resolveCollisions();
+    //   relaxLeftToRight(alpha);
+    //   resolveCollisions();
+    // }
 
     function initializeNodeDepth() {
       var ky = d3.min(nodesByBreadth, function(nodes) {
         return (size[1] - (nodes.length - 1) * nodePadding) / d3.sum(nodes, value);
       });
 
+      // console.log(nodesByBreadth)
+
       nodesByBreadth.forEach(function(nodes) {
         nodes.forEach(function(node, i) {
           node.y = i;
-          node.dy = node.value * ky;
-          // console.log(node.y)
+           // node.dy = node.value * ky;
+          if(node.group === 'Router'){
+            var routerNum = nodesByBreadth[1].length;
+            node.dy = size[1] / ( routerNum + 1 );
+          }
+          else if(node.group === 'ISP')
+            node.dy = 40;
+          else
+            node.dy = 20;
         });
       });
 
       links.forEach(function(link) {
-        link.dy = link.value * ky;
+        link.dy = link.value;
       });
     }
 
@@ -251,33 +268,38 @@ d3.sankey = function() {
     function resolveCollisions() {
       nodesByBreadth.forEach(function(nodes) {
         var node,
-            dy,
+            dy = nodes[0].dy
             y0 = 0,
             n = nodes.length,
-            i;
+            i = 0,
+            height = size[1];
 
+        var margin = ( height - n * nodes[0].dy ) / (n + 1);
+
+        // console.log(margin)
         // Push any overlapping nodes down.
-        nodes.sort(ascendingDepth);
+        // nodes.sort(ascendingDepth);
         for (i = 0; i < n; ++i) {
-          node = nodes[i];
-          dy = y0 - node.y;
-          if (dy > 0) node.y += dy;
-          y0 = node.y + node.dy + nodePadding;
+          nodes[i].y = (i + 1) * margin + i * dy 
+          // node = nodes[i];
+          // dy = y0 - node.y;
+          // if (dy > 0) node.y += dy;
+          // y0 = node.y + node.dy + nodePadding;
         }
 
         // If the bottommost node goes outside the bounds, push it back up.
-        dy = y0 - nodePadding - size[1];
-        if (dy > 0) {
-          y0 = node.y -= dy;
+        // dy = y0 - nodePadding - size[1];
+        // if (dy > 0) {
+        //   y0 = node.y -= dy;
 
-          // Push any overlapping nodes back up.
-          for (i = n - 2; i >= 0; --i) {
-            node = nodes[i];
-            dy = node.y + node.dy + nodePadding - y0;
-            if (dy > 0) node.y -= dy;
-            y0 = node.y;
-          }
-        }
+        //   // Push any overlapping nodes back up.
+        //   for (i = n - 2; i >= 0; --i) {
+        //     node = nodes[i];
+        //     dy = node.y + node.dy + nodePadding - y0;
+        //     if (dy > 0) node.y -= dy;
+        //     y0 = node.y;
+        //   }
+        // }
       });
     }
 
@@ -287,29 +309,46 @@ d3.sankey = function() {
   }
 
   function computeLinkDepths() {
-    nodes.forEach(function(node) {
-      node.sourceLinks.sort(ascendingTargetDepth);
-      node.targetLinks.sort(ascendingSourceDepth);
-    });
+    // nodes.forEach(function(node) {
+    //   node.sourceLinks.sort(ascendingTargetDepth);
+    //   node.targetLinks.sort(ascendingSourceDepth);
+    // });
+    // console.log(nodesByGroup);
+
     nodes.forEach(function(node) {
       var sy = 0, ty = 0;
-      node.sourceLinks.forEach(function(link) {
-        link.sy = sy;
+
+      console.log(
+        _.reduce(
+          node.sourceLinks, 
+          function(sum, node){return sum + node.dy},
+          0
+        )
+      )
+
+      var sourceLinks_dy = _.reduce(node.sourceLinks, function(sum, node){return sum + node.dy}, 0);
+      var source_margin = (node.dy - sourceLinks_dy) / (node.sourceLinks.length + 1);
+
+      var targetLinks_dy = _.reduce(node.targetLinks, function(sum, node){return sum + node.dy}, 0);
+      var target_margin = (node.dy - targetLinks_dy) / (node.targetLinks.length + 1);
+
+      node.sourceLinks.forEach(function(link, i) {
+        link.sy = sy + source_margin * (i + 1);
         sy += link.dy;
       });
-      node.targetLinks.forEach(function(link) {
-        link.ty = ty;
+      node.targetLinks.forEach(function(link, i) {
+        link.ty = ty + target_margin * (i + 1);
         ty += link.dy;
       });
     });
 
-    function ascendingSourceDepth(a, b) {
-      return a.source.y - b.source.y;
-    }
+    // function ascendingSourceDepth(a, b) {
+    //   return a.source.y - b.source.y;
+    // }
 
-    function ascendingTargetDepth(a, b) {
-      return a.target.y - b.target.y;
-    }
+    // function ascendingTargetDepth(a, b) {
+    //   return a.target.y - b.target.y;
+    // }
   }
 
   function center(node) {
