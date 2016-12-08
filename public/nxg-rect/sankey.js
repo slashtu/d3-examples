@@ -56,8 +56,8 @@ d3.sankey = function() {
     computeLinkDepths();
 
     computeNodeGroup();
-    // console.log(links)
-    // console.log(nodes)
+    console.log(links)
+    console.log(nodes)
 
     return sankey;
   };
