@@ -1,0 +1,61 @@
+{"nodes":
+  [ 
+    {"name":"SWITCH", "group":"", "device": "switch", "pos": "root"},
+    {"name":"PORT01", "group":"port"},
+    {"name":"PORT02", "group":"port"},
+    {"name":"PORT03", "group":"port"},
+    {"name":"PORT04", "group":"port"},
+    {"name":"PORT05", "group":"port"},
+    {"name":"PORT06", "group":"port"},
+    {"name":"PORT07", "group":"port"},
+    {"name":"PORT08", "group":"port"},
+    {"name":"PORT09", "group":"port"},
+    {"name":"PORT10", "group":"port"},
+    {"name":"PORT11", "group":"port"},
+    {"name":"PORT12", "group":"port"},
+    {"name":"PORT13", "group":"port"},
+    {"name":"PORT14", "group":"port"},
+    {"name":"PORT15", "group":"port"},
+    {"name":"PORT16", "group":"port"},
+    {"name":"PORT17", "group":"port"},
+    {"name":"PORT18", "group":"port"},
+    {"name":"PORT19", "group":"port"},
+    {"name":"PORT20", "group":"port"},
+    {"name":"PORT21", "group":"port"},
+    {"name":"PORT22", "group":"port"},
+    {"name":"PORT23", "group":"port"},
+    {"name":"PORT24", "group":"port"}
+  ],
+"links":
+  [
+    {"source":0,"target":1,"value":5},
+    {"source":0,"target":2,"value":5},
+    {"source":0,"target":3,"value":5},
+    {"source":0,"target":4,"value":5},
+    {"source":0,"target":5,"value":5},
+    {"source":0,"target":6,"value":5},
+    {"source":0,"target":7,"value":5},
+    {"source":0,"target":8,"value":5},
+    {"source":0,"target":9,"value":5},
+    {"source":0,"target":10,"value":5},
+    {"source":0,"target":11,"value":5},
+    {"source":0,"target":12,"value":5},
+    {"source":0,"target":13,"value":5},
+    {"source":0,"target":14,"value":5},
+    {"source":0,"target":15,"value":5},
+    {"source":0,"target":16,"value":5},
+    {"source":0,"target":17,"value":5},
+    {"source":0,"target":18,"value":5},
+    {"source":0,"target":19,"value":5},
+    {"source":0,"target":20,"value":5},
+    {"source":0,"target":21,"value":5},
+    {"source":0,"target":22,"value":5},
+    {"source":0,"target":23,"value":5},
+    {"source":0,"target":24,"value":5}
+  ]
+}
+
+
+
+
+

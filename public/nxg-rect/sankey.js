@@ -216,6 +216,7 @@ d3.sankey = function() {
 
       nodesByBreadth.forEach(function(nodes) {
         nodes.forEach(function(node, i) {
+          console.log(node)
           node.y = i;
            // node.dy = node.value * ky;
           if(node.group === 'Router'){
@@ -224,6 +225,8 @@ d3.sankey = function() {
           }
           else if(node.group === 'ISP')
             node.dy = 40;
+          else if(node.pos === 'root')
+            node.dy = 300;
           else
             node.dy = 20;
         });

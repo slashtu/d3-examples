@@ -29,6 +29,9 @@
     .attr("transform", function(d) { return "translate(" + 100 + "," + 100 + ")"; })
  })
 
+function remove(){
+  d3.select("svg").remove();
+}
 
 function fadeOut(time){
   d3.selectAll(".nodegroup").transition().duration(time).style("opacity", 0).remove();
